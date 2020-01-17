@@ -22,27 +22,45 @@ def sincronizaFTP(miServidorFTP, miUsuario, miContraseña, miCarpetaRemota, miCa
   import os
   from ftplib import FTP
 
+  if miCarpetaRemota[-1] != "/":
+    miCarpetaRemota += "/"
+  if miCarpetaLocal[-1] != "/":
+    miCarpetaLocal += "/"
+
+
   ftp = FTP(miServidorFTP)
   ftp.login(miUsuario, miContraseña)
   ftp.cwd(miCarpetaRemota)
   miListaRemota = set(ftp.nlst())
   miListaLocal = set(os.listdir(miCarpetaLocal))
 
-  paraBajar= miListaRemota - miListaLocal
   paraSubir = miListaLocal - miListaRemota
+  paraBajar = miListaRemota - miListaLocal
   vacio = set()
 
-  print("\nPor descargar:\n ")
-  if ( paraBajar == vacio ):
-    print("Todos los archivos han sido descargados.\n")
-  else:
-    print(paraBajar)
+  if subir:
+    print("\nPor cargar:\n ")
+    if ( paraSubir == vacio ):
+      print("Todos los archivos han sido cargados.\n")
+    else:
+      subidos = 0
+      for fichero in paraSubir:
+        print("  * Subiendo fichero:" + fichero)
+        ftp.storbinary('STOR ' + fichero)
+        subidos += 1
 
-  print("\nPor cargar:\n")
-  if ( paraSubir == vacio ):
-    print("Todos los archivos han sido cargados.\n")
-  else:
-    print(paraSubir)
+  if bajar:
+    print("\nPor descargar:\n")
+    if ( paraBajar == vacio ):
+      print("Todos los archivos han sido descargados.\n")
+    else:
+      descargados = 0
+      for fichero in paraBajar:
+        print("  * Descargando fichero:" + fichero)
+        archivo = open( miCarpetaLocal + fichero, 'wb')
+        ftp.retrbinary('RETR ' + fichero, archivo.write)
+        archivo.close()
+        descargados += 1
 
   ftp.close()
   ftp = None
