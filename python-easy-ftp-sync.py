@@ -1,18 +1,20 @@
+import os
 from ftplib import FTP
 
 miServidorFTP = "192.168.1.47"
 miUsuario = "usuario"
 miContraseña = "contraseña"
 miCarpetaRemota = "/home/jimmy/Descargas/BCV"
+miCarpetaLocal = "/home/kevin/Descargas/BCV"
 
-ftp = FTP(miServidorFtp)
+ftp = FTP(miServidorFTP)
 ftp.login(miUsuario, miContraseña)
 ftp.cwd(miCarpetaRemota)
+miListaRemota = ftp.nlst()
+print(miListaRemota)
 
-miLista = ftp.nlst()
-archivo = open(miLista[1], 'wb')
-ftp.retrbinary('RETR ' + miLista[1], archivo.write)
-archivo.close()
+miListaLocal = set(os.listdir(miCarpetaLocal))
+print(miListaLocal)
 
 ftp.close()
 ftp = None
