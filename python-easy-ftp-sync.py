@@ -6,7 +6,7 @@ miContraseña = "contraseña"
 miCarpetaRemota = "/home/jimmy/Descargas/BCV"
 
 ftp = FTP(miServidorFtp)
-ftp.login(miUsuario, miContraseña')
+ftp.login(miUsuario, miContraseña)
 ftp.cwd(miCarpetaRemota)
 
 miLista = ftp.nlst()
