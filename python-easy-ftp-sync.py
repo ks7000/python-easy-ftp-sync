@@ -26,7 +26,8 @@ def sincronizaFTP(miServidorFTP, miUsuario, miContraseña, miCarpetaRemota, miCa
     miCarpetaRemota += "/"
   if miCarpetaLocal[-1] != "/":
     miCarpetaLocal += "/"
-
+  if not os.path.exists(miCarpetaLocal):
+    os.makedirs(miCarpetaLocal)
 
   ftp = FTP(miServidorFTP)
   ftp.login(miUsuario, miContraseña)
